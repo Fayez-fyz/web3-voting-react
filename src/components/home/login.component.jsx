@@ -1,3 +1,5 @@
+import PropTypes from "prop-types";
+
 const LoginComponent = ({ connectWallet }) => {
   return (
     <div>
@@ -15,5 +17,9 @@ const LoginComponent = ({ connectWallet }) => {
       </div>
     </div>
   );
+};
+
+LoginComponent.propTypes = {
+  connectWallet: PropTypes.func.isRequired,
 };
 export default LoginComponent;

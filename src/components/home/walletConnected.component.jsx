@@ -1,12 +1,15 @@
+import PropTypes from "prop-types";
+import { RingLoader } from "react-spinners";
+
 const WalletConnectedComponent = ({
   account,
-  votingStatus,
   remainingTime,
   candidateDetails,
   candidateNumber,
   setCandidateNumber,
   voteFunction,
   showButton,
+  isLoading,
 }) => {
   return (
     <div>
@@ -45,39 +48,56 @@ const WalletConnectedComponent = ({
         )}
       </div>
       <div className="mt-10">
-        <table className="table-auto w-full border-2 border-slate-600">
-          <thead>
-            <tr className="bg-slate-700 border-b-2 border-slate-600">
-              <th className="text-center text-xl font-bold text-slate-200">
-                S.No
-              </th>
-              <th className="text-center text-xl font-bold text-slate-200">
-                Candidate name
-              </th>
-              <th className="text-center text-xl font-bold text-slate-200">
-                Candidate votes
-              </th>
-            </tr>
-          </thead>
-          <tbody className="bg-transparent">
-            {candidateDetails?.map((candidate, index) => (
-              <tr key={index}>
-                <td className="text-center text-xl text-slate-200 border-b-2 border-r-2 border-slate-600">
-                  {candidate.id}
-                </td>
-                <td className="text-center text-xl text-slate-200 border-b-2 border-r-2 border-slate-600">
-                  {candidate.name}
-                </td>
-                <td className="text-center text-xl text-slate-200 border-b-2 border-r-2 border-slate-600">
-                  {candidate.voteCount}
-                </td>
+        {isLoading ? (
+          <div className="flex justify-center items-center mt-2">
+            <RingLoader color="#36d7b7" size={100} />
+          </div>
+        ) : (
+          <table className="table-auto w-full border-2 border-slate-600">
+            <thead>
+              <tr className="bg-slate-700 border-b-2 border-slate-600">
+                <th className="text-center text-xl font-bold text-slate-200">
+                  S.No
+                </th>
+                <th className="text-center text-xl font-bold text-slate-200">
+                  Candidate name
+                </th>
+                <th className="text-center text-xl font-bold text-slate-200">
+                  Candidate votes
+                </th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="bg-transparent">
+              {candidateDetails?.map((candidate, index) => (
+                <tr key={index}>
+                  <td className="text-center text-xl text-slate-200 border-b-2 border-r-2 border-slate-600">
+                    {candidate.id}
+                  </td>
+                  <td className="text-center text-xl text-slate-200 border-b-2 border-r-2 border-slate-600">
+                    {candidate.name}
+                  </td>
+                  <td className="text-center text-xl text-slate-200 border-b-2 border-r-2 border-slate-600">
+                    {candidate.voteCount}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
       </div>
     </div>
   );
+};
+
+WalletConnectedComponent.propTypes = {
+  account: PropTypes.string.isRequired,
+  remainingTime: PropTypes.string.isRequired,
+  candidateDetails: PropTypes.array.isRequired,
+  candidateNumber: PropTypes.string.isRequired,
+  setCandidateNumber: PropTypes.func.isRequired,
+  voteFunction: PropTypes.func.isRequired,
+  showButton: PropTypes.bool.isRequired,
+  isLoading: PropTypes.bool.isRequired,
 };
 
 export default WalletConnectedComponent;

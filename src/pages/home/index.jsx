@@ -4,9 +4,9 @@ import WalletConnectedComponent from "../../components/home/walletConnected.comp
 import { createEthereumContract } from "../../utils/create-contract/createContract";
 import VoteFinishedComponent from "../../components/home/finished.component";
 import { ethers } from "ethers";
+import toast from "react-hot-toast";
 
 const HomePage = () => {
-  const [provider, setProvider] = useState(null);
   const [account, setAccount] = useState(null);
   const [isConnected, setIsConnected] = useState(false);
   const [votingStatus, setVotingStatus] = useState(true);
@@ -14,6 +14,7 @@ const HomePage = () => {
   const [candidateDetails, setCandidateDetails] = useState([]);
   const [candidateNumber, setCandidateNumber] = useState("");
   const [canVote, setCanVote] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     getCandidateDetails();
@@ -36,6 +37,7 @@ const HomePage = () => {
   };
 
   const voteFunction = async () => {
+    setIsLoading(true);
     try {
       const { contract } = await createEthereumContract();
       const vote = await contract.vote(candidateNumber);
@@ -43,7 +45,10 @@ const HomePage = () => {
       getCandidateDetails();
       getCurrentStatus();
       getRemainingTime();
+      setCandidateNumber("");
       checkVoteStatus();
+      toast.success("Voted successfully");
+      setIsLoading(false);
     } catch (error) {
       console.error("Failed to vote:", error);
     }
@@ -107,7 +112,6 @@ const HomePage = () => {
     try {
       if (window.ethereum) {
         const provider = new ethers.BrowserProvider(window.ethereum);
-        setProvider(provider);
         const signer = await provider.getSigner();
         const address = signer.address;
         setAccount(address);
@@ -126,6 +130,7 @@ const HomePage = () => {
       {votingStatus ? (
         isConnected ? (
           <WalletConnectedComponent
+            isLoading={isLoading}
             account={account}
             votingStatus={votingStatus}
             remainingTime={remainingTime}

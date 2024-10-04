@@ -1,5 +1,6 @@
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import HomePage from "./pages/home";
+import { Toaster } from "react-hot-toast";
 
 function App() {
   return (
@@ -10,6 +11,7 @@ function App() {
             <Route path="/" element={<HomePage />} />
           </Routes>
         </Router>
+        <Toaster position="top-right" />
       </div>
     </>
   );
